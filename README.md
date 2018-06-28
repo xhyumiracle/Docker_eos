@@ -28,3 +28,4 @@ alias cleos-bash='docker-compose -f /path/to/docker-compose.yml run --rm cleos b
 # Tips
 to check the server(nodeos) container, type
 `docker inspect <container_id>`
+
