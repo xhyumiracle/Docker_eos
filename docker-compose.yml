@@ -1,0 +1,53 @@
+version: '2'
+services:
+  nodeosd:
+    image: xhyumiracle/eos
+    #entrypoint: "/opt/eosio/bin/nodeosd.sh --data-dir /opt/eosio/bin/data-dir -e -p eosio --contracts-console"
+    hostname: nodeosd
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+    networks:
+      - eos_network
+    ports:
+      - 8888:8888
+      - 9876:9876
+    expose:
+      - "8888"
+    volumes:
+      - /Users/xiaohang.yu/xhyu/eos-dir/data-volumes/nodeos-data-volume:/opt/eosio/bin/data-dir
+
+  cleos:
+    image: xhyumiracle/eos
+    hostname: cleos
+    cap_add:
+      - SYS_PTRACE
+    security_opt:
+      - seccomp:unconfined
+    networks:
+      - eos_network
+    volumes:
+      - /Users/xiaohang.yu/xhyu/eos-dir/data-volumes/cleos-data-volume:/root
+
+  eosiocpp:
+    image: eosio/eos-dev
+    entrypoint: eosiocpp
+    hostname: eosiocpp
+    networks:
+      - eos_network
+    volumes:
+      - /Users/xiaohang.yu/xhyu/eos-dir/data-volumes/cleos-data-volume:/root
+
+  keosd:
+    image: xhyumiracle/eos
+    command: /opt/eosio/bin/keosd --wallet-dir /opt/eosio/bin/data-dir --http-server-address=127.0.0.1:8900
+    hostname: keosd
+    networks:
+      - eos_network
+    volumes:
+      - /Users/xiaohang.yu/xhyu/eos-dir/data-volumes/keosd-data-volume:/opt/eosio/bin/data-dir
+
+networks:
+  eos_network:
+    driver: bridge
